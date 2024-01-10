@@ -1,0 +1,67 @@
+﻿@model AppointmentFormViewModel
+<form asp-controller="Appointments" asp-action="Edit" enctype="multipart/form-data" method="post" class="mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">Edit Appointement</div>
+                <div class="card-body">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.HiddenFor(m => m.PatientId)
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Doctor, new { @class = "col-form-label  col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(model => model.SelectedDoctorId, new SelectList(Model.Doctors, "Id", "Name", Model.SelectedDoctorId), "Select Doctor", new { @class = "form-select " })
+                            @Html.ValidationMessageFor(model => model.SelectedDoctorId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Date, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Date, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Time, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Time, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(m => m.Time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Detail, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Detail, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(m => m.Detail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center align-items-center">
+                        @Html.LabelFor(model => model.Status, new { @class = "col-form-label  col-sm-2" })
+                        <div class="d-flex col-sm-10  ">
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.Status, "true", new { @class = "form-check-input", id = "Approuved" })
+                                <label class="form-check-label" for="Approved">Approved</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.Status, "false", new { @class = "form-check-input", id = "Pending" })
+                                <label class="form-check-label" for="Pending">Pending</label>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <a class="btn  btn-secondary " asp-controller="Appointments" asp-action="Index">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

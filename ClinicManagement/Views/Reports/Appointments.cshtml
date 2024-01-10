@@ -1,0 +1,38 @@
+﻿@model Appointment
+    <div class="row">
+        <!-- Form date pickers -->
+        <div class="well" style="overflow: auto">
+            <form id="form1" class="row g-3">
+                <div class="col-sm-2"></div>
+
+                <div class="col-sm-3">
+                    <label for="option" class="form-label">Select</label>
+                    <select name="option" class="form-select">
+                        <option value="">--Select one--</option>
+                        <option value="ThisMonth">This Month</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="name" class="form-label">Doctor</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter doctor name" />
+                </div>
+                <div class="col-sm-3">
+                    <label></label><br />
+                    <button type="button" class="btn btn-primary" id="submit">Submit</button>
+                    <button type="button" class="btn btn-default" id="showAll">Show All</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body" >
+                    @*@Html.Partial("_Appointments")*@
+                </div>
+            </div>
+        </div>
+
+    </div>

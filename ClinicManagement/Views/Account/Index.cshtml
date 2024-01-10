@@ -1,0 +1,69 @@
+﻿@model UsersViewModel
+
+@{
+    ViewBag.Title = "All Users";
+}
+<h3>Manage Users</h3>
+<hr>
+<div class="col-12 mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        @{
+            ViewData["Action"] = "Index";
+            ViewData["Controller"] = "Account";
+        }
+
+        @await Html.PartialAsync("_EntryFormPartial", Model)
+    </div>
+</div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <!-- Table for displaying doctor information -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <!-- Table headers -->
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Account Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each Doctor and display their information -->
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <!-- doctor details -->
+                            <td>@user.Email</td>
+                            <td>@user.Roles</td>
+                            <td>
+                                @{ if ((bool)user.IsActive==true )
+                                    {
+                                        <span  class="badge rounded-pill bg-success" style="width: 80px;">
+                                            Available
+                                        </span>
+
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-danger" style="width: 80px;">
+                                            Closed
+                                        </span>
+                                    } }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditUser", "Account", new { id = user.Id })" class="btn btn-info btn-sm">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a> 
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    @await Html.PartialAsync("_PaginationPartial", Model)
+</div>

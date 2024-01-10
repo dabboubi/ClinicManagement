@@ -1,0 +1,43 @@
+﻿@model ApplicationUser
+<form asp-controller="Account" asp-action="EditUser" enctype="multipart/form-data" method="post" class="mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">Edit User</div>
+                <div class="card-body">
+                    @Html.AntiForgeryToken()
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Email, new { @class = "col-form-label col -sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center align-items-center">
+                        <label class=" col-form-label col-sm-2">Active</label>
+                        <div class=" d-flex col-sm-10 ">
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.IsActive, "true", new { @class = "form-check-input", id = "Active" })
+                                <label class="form-check-label" for="Active">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.IsActive, "false", new { @class = "form-check-input", id = "Locked" })
+                                <label class="form-check-label" for="Locked">Locked</label>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <a class="btn btn-primary" asp-controller="Account" asp-action="Index">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

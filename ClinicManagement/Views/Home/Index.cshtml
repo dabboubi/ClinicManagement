@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row mt-2">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 ">
+        <div class="card card-fill">
+            <div class="d-flex align-items-center justify-content-between mx-2">
+                <div class="count patients  fw-bold fs-4"></div>
+                <i class="bi bi-caret-right-square fs-1"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Total Patients</h4>
+                <p class="card-text"><i class="text-success todayspatients"></i> Added From Today</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 ">
+        <div class="card">
+            <div class="d-flex align-items-center justify-content-between mx-2">
+                <div class="count appointments  fw-bold fs-4"></div>
+                <i class="bi bi-chat-dots fs-1"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Total Appointments</h4>
+                <p class="card-text"><i class="text-success todaysappointments"></i>  for today</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 ">
+        <div class="card">
+            <div class="d-flex align-items-center justify-content-between mx-2">
+                <div class="count doctors  fw-bold fs-4"></div>
+                <i class="bi bi-sort-down fs-1"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Total Doctors</h4>
+                <p class="card-text"><i class="text-success availabledoctors"></i>  Doctors Available</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 ">
+        <div class="card">
+            <div class="d-flex align-items-center justify-content-between mx-2">
+                <div class="count users  fw-bold fs-4"></div>
+                <i class="bi bi-check2-square fs-1"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Total Users</h4>
+                <p class="card-text"><i class="text-success activeaccounts"></i> Active Accounts</p>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            //render total patients
+            // Make an AJAX call to the TotalPatients action
+            $.get('@Url.Action("TotalPatients", "Home")', function (data) {
+                $('.count.patients').text(data);
+            }).fail(function (error) {
+                console.error('Error fetching total patients:', error);
+            });
+            //render todays patients
+            $.get('@Url.Action("TodaysPatients", "Home")', function (data) {
+                $('.todayspatients').append(data);
+            }, 'json');
+            //render total apointments
+            $.get('@Url.Action("TotalAppointments", "Home")', function (data) {
+                $('.appointments').append(data);
+            }, 'json');
+            //render total doctors
+            $.get('@Url.Action("TotalDoctors", "Home")', function (data) {
+                $('.doctors').append(data);
+            }, 'json');
+            //Today's appointments
+            $.get('@Url.Action("TodaysAppointments", "Home")', function (data) {
+                $('.todaysappointments').append(data);
+            }, 'json');
+            //render available doctors
+            $.get('@Url.Action("AvailableDoctors", "Home")', function (data) {
+                $('.availabledoctors').append(data);
+            }, 'json');
+            //ActiveAccounts
+            $.get('@Url.Action("ActiveAccounts", "Home")', function (data) {
+                $('.activeaccounts').append(data);
+        }, 'json');
+         //render total users
+            $.get('@Url.Action("TotalUsers", "Home")', function (data) {
+                $('.users').append(data);
+            }, 'json');
+        });
+    </script>
+}
+

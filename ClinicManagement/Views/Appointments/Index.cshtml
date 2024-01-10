@@ -1,0 +1,64 @@
+﻿@model AppointmentsViewModel
+<h3>Appointments</h3>
+<hr>
+<div class="col-12 mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        @{
+            ViewData["Action"] = "Index";
+            ViewData["Controller"] = "Appointments";
+        }
+        @await Html.PartialAsync("_EntryFormPartial", Model)
+    </div>
+</div>
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <!-- Table for displaying patient information -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <!-- Table headers -->
+                        <th>Patient Name</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Doctor</th>
+                        <th>Detail</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each patient and display their information -->
+                    @foreach (var appointment in Model.Appointments)
+                    {
+                    <tr>
+                        <!-- Patient details -->
+                        <td>@appointment.Patient.Name</td>
+                        <td>@appointment.Patient.Phone</td>
+                        <td>@appointment.StartDateTime.ToString("dd MMM yyyy")</td>
+                        <td>@appointment.StartDateTime.ToString("HH:mm")</td>
+                        <td>@appointment.Doctor.Name</td>
+                        <td>@appointment.Detail</td>
+                        <td>
+                            <span class="badge rounded-pill @((appointment.Status) ? "bg-success" : "bg-danger") ms-2" readonly style="width: 80px;">
+                                @((appointment.Status) ? "Approuved" : "Pending")
+                            </span>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Appointments", new { id = appointment.Id })" class="btn btn-primary btn-sm">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    @await Html.PartialAsync("_PaginationPartial", Model)
+</div>
+

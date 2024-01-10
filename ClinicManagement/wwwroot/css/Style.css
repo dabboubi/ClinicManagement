@@ -1,0 +1,75 @@
+﻿/* Base font size */
+html {
+    font-size: 14px;
+}
+
+/* Responsive font size for larger screens */
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Common border styles */
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Common box shadow */
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+/* Button styles for accepting policy */
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+.custom-hr {
+    border-top: 2px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+/* Circle styles */
+.circle-wrapper {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+/* Circle styles */
+.circle {
+    display: inline-flex; /* To keep the circle and number on the same line */
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    margin-left: 10px; /* To create some spacing between the text and the circle */
+    margin-right: 10px;
+}
+.appointment-text {
+    margin-bottom: 0; /* Remove default margin for <p> */
+}
+
+/* Override default styles for list group items */
+.list-group-item {
+    border: none;
+}

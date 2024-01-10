@@ -1,0 +1,32 @@
+﻿<!-- Form for selecting the number of entries to display -->
+<form class="d-flex align-items-center" id="entryForm" data-action="@ViewData["Action"]" data-controller="@ViewData["Controller"]">
+    <label for="entry" class="form-label me-2">Show</label>
+    <!-- Dropdown for selecting the number of entries -->
+    <select class="form-select" id="entry" name="entries" style="width: 100px;" onchange="this.form.submit()">
+        <option value="1" selected="@Equals(Model.SelectedEntries, 1)">1</option>
+        <option value="5" selected="@Equals(Model.SelectedEntries, 5)">5</option>
+        <option value="10" selected="@Equals(Model.SelectedEntries, 10)">10</option>
+    </select>
+    <label for="entry" class="form-label ms-2">Entries</label>
+</form>
+
+<!-- Search form -->
+<form class="d-flex ms-auto">
+    <input class="form-control me-2" type="text" placeholder="Search">
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Handle the form submission to update the number of entries
+            $('#entryForm').submit(function (e) {
+                e.preventDefault();
+                var selectedEntries = $('#entry').val();
+                var action = $('#entryForm').data('action');
+                var controller = $('#entryForm').data('controller');
+                window.location.href = '@Url.Action("Index", "ReplaceController")?entries=' + selectedEntries
+                    .replace('ReplaceController', controller);
+            });
+        });
+    </script>
+}

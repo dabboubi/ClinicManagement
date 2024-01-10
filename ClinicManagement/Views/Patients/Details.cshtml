@@ -1,0 +1,66 @@
+﻿@model PatientDetailViewModel
+@{
+    ViewBag.Title = Model.Heading;
+}
+
+<h3>Details</h3>
+<hr>
+
+<div class="row mb-3 mt-3">
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <h3>@Model.Patient.Name</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fa fa-user"></i><strong>Name:</strong> @Model.Patient.Name</li>
+            <li class="list-group-item"><i class="fa fa-venus-mars"></i><strong>Sex:</strong> @Model.Patient.Sex</li>
+            <li class="list-group-item"><i class="fa fa-city"></i><strong>City:</strong> @Model.Patient.City.Name</li>
+
+            @if (Model.Patient.Weight != null)
+            {
+                <li class="list-group-item"><i class="fa fa-weight"></i><strong>Weight:</strong> @Model.Patient.Weight</li>
+            }
+
+            @if (Model.Patient.Height != null)
+            {
+                <li class="list-group-item"><i class="fa fa-user"></i><strong>Height:</strong> @Model.Patient.Height</li>
+            }
+
+            <li class="list-group-item"><i class="fa fa-map-marker user-profile-icon"></i><strong>Address:</strong> @Model.Patient.Address</li>
+            <li class="list-group-item"><i class="fa fa-phone"></i><strong>Phone:</strong> @Model.Patient.Phone</li>
+            <li class="list-group-item"><i class="fa fa-clock"></i><strong>Age:</strong> @Model.Patient.Age</li>
+        </ul>
+
+        <a asp-controller="Patients" asp-action="edit" asp-route-id="@Model.Patient.Id" class="btn btn-success mt-2"><i class="fa fa-edit me-2"></i>Edit</a>
+    </div>
+
+    <div class="col-lg-8 col-md-6 col-sm-12">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="appointment-section">
+                    <span><strong>Appointment</strong></span>
+                    <hr class="custom-hr">
+                    <div class="circle-wrapper">
+                        <p class="appointment-text">Patient Appointment</p>
+                        <span class="circle">@Model.CountAppointments</span>
+                        <a href="@Url.Action("Create", "Appointments", new { id=Model.Patient.Id})" >
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="attendance-section">
+                    <span><strong>Attendance</strong></span>
+                    <hr class="custom-hr">
+                    <div class="circle-wrapper">
+                        <p class="appointment-text">Lab Attendance</p>
+                        <span class="circle">2</span>
+                        <a href="@Url.Action("Create", "Attendances", new { id=Model.Patient.Id})" >
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

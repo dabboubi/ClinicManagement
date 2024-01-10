@@ -1,0 +1,96 @@
+﻿@model AppointmentFormViewModel
+@{
+    ViewBag.Title = Model.Heading;
+}
+<form asp-controller="Appointments" asp-action="Create" enctype="multipart/form-data" method="post" class="mt-3">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.SelectedPatientId)
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Doctor Info</div>
+                <div class="card-body">
+                    <div class="row text-center mb-2">
+                        <div class="col-sm-3">
+                            <label for="Doctor" class="form-label">Doctor</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(model => model.SelectedDoctorId, new SelectList(Model.Doctors, "Id", "Name"), "Select Doctor", new { @class = "form-select" })
+                            @Html.ValidationMessageFor(m => m.SelectedDoctorId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Patient name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Add patient data here if needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Appointment</div>
+                <div class="card-body">
+                    <div class="row text-center mb-2">
+                        @Html.LabelFor(model => model.Date, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Date, new { @class = "form-control date" })
+                            @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row text-center mb-2">
+                        @Html.LabelFor(model => model.Time, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Time, new { @class = "form-control time" })
+                            @Html.ValidationMessageFor(m => m.Time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row text-center mb-2">
+                        @Html.LabelFor(model => model.Detail, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Detail, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Detail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row text-center">
+                        <div class="col-md-6 col-sm-6 col-12">
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('.date').datepicker({
+                minDate: 0,
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                clearBtn: true,
+                orientation: "bottom left",
+                autoclose: true
+            });
+            $('.time').clockpicker({
+                placement: 'bottom',
+                align: 'left',
+                autoclose: true,
+                donetext: 'Done',
+                twentyfourhour: true
+            });
+        });
+    </script>
+</form>

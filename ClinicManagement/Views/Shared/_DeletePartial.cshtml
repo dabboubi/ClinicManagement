@@ -1,0 +1,64 @@
+﻿<!-- The Modal for deleting records  -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Record</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this record?
+            </div>
+            <div class="modal-footer">
+                <!-- Button to confirm deletion -->
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hidden form for delete action -->
+@*<form id="confirmDeleteForm" method="post" action="@Url.Action("ConfirmDelete", "Patients")">
+    <input type="hidden" name="id" value="" />
+    @Html.AntiForgeryToken()
+</form>*@
+<form id="confirmDeleteForm" method="post">
+    <input type="hidden" name="id" value="" />
+    @Html.AntiForgeryToken()
+</form>
+
+<!-- Section for scripts -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // Handle the click event for deleting a record
+            $('.delete-btn').on('click', function () {
+                var recordId = $(this).data('record-id');
+                $('#confirmDeleteForm input[name="id"]').val(recordId);
+
+                // Set the action URL dynamically based on the record type (doctors/patients)
+                var actionUrl = $(this).data('record-type') === 'doctors'
+                    ? '@Url.Action("ConfirmDelete", "Doctors")'
+                    : '@Url.Action("ConfirmDelete", "Patients")';
+
+                $('#confirmDeleteForm').attr('action', actionUrl);
+
+                // Show the delete modal
+                $('#deleteModal').modal('show');
+            });
+
+            // Handle the modal closing event
+            $('#deleteModal').on('hidden.bs.modal', function () {
+                // Redirect to the ConfirmDelete action with the record ID
+                var recordId = $('#confirmDeleteForm input[name="id"]').val();
+                window.location.href = $('#confirmDeleteForm').attr('action') + '/' + recordId;
+            });
+
+            // Handle the click event for confirming deletion
+            $('#confirmDeleteBtn').on('click', function () {
+                // Submit the form
+                $('#confirmDeleteForm').submit();
+            });
+        });
+    </script>
+}

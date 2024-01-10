@@ -1,0 +1,48 @@
+﻿<ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+    <li>
+        <a asp-controller="home" asp-action="index" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-house-door"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+        </a>
+    </li>
+    <li>
+        <a asp-controller="appointments" asp-action="index" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-calendar-event"></i> <span class="ms-1 d-none d-sm-inline">Appointments</span>
+        </a>
+    </li>
+    <li>
+        <a asp-controller="doctors" asp-action="index" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Doctors</span>
+        </a>
+    </li>
+    <li>
+        <a asp-controller="Account" asp-action="index" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Users</span>
+        </a>
+    </li>
+    <li>
+        <a asp-controller="patients" asp-action="index" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Patients</span>
+        </a>
+    </li>
+    <li>
+        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-bar-chart-line"></i> <span class="ms-1 d-none d-sm-inline">Reports</span>
+        </a>
+        <ul class="collapse nav flex-column ms-1" id="submenu2">
+            <li class="w-100">
+                <a class="nav-link px-0 text-white"> <span class="d-none d-sm-inline">Daily Appoitments</span></a>
+            </li>
+            <li>
+                <a asp-controller="Reports" asp-action="Appointments" class="nav-link px-0 text-white"> <span class="d-none d-sm-inline">Appoitments</span> </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link px-0 text-white"> <span class="d-none d-sm-inline">Atttendance</span> </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a asp-controller="chats" asp-action="index" class="nav-link px-0 align-middle text-white">
+            <i class="fs-4 bi-chat-dots"></i> <span class="ms-1 d-none d-sm-inline">Chat</span>
+        </a>
+    </li>
+</ul>

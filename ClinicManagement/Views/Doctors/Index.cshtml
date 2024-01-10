@@ -1,0 +1,63 @@
+﻿@model DoctorsViewModel
+<h3>Doctors</h3>
+<hr>
+<div class="col-12 mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        @{
+            ViewData["Action"] = "Index";
+            ViewData["Controller"] = "Doctors";
+        }
+        @await Html.PartialAsync("_EntryFormPartial", Model)
+    </div>
+</div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <!-- Table for displaying doctor information -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <!-- Table headers -->
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Specialization</th>
+                        <th>Status</th>
+                        <th>Account Status</th>
+
+                        <th><a href="@Url.Action("AddDoctor", "Account")" class="btn btn-primary btn-sm"><i class="bi bi-plus"></i> Add</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each Doctor and display their information -->
+                    @foreach (var doctor in Model.Doctors)
+                    {
+                    <tr>
+                        <!-- doctor details -->
+                        <td>@doctor.Name</td>
+                        <td>@doctor.Phone</td>
+                        <td>@doctor.Specialization.Name</td>
+                        <td>
+                            <span class="badge rounded-pill @((doctor.IsAvailable) ? "bg-success" : "bg-danger") ms-2" readonly style="width: 80px;">
+                                @((doctor.IsAvailable) ? "Available" : "Closed")
+                            </span>
+                        </td>
+
+                        <td>@doctor.PhysicianId</td>
+
+                        <td>
+                            <a href="@Url.Action("Details", "Doctors", new { id = doctor.Id })" class="btn btn-info btn-sm">
+                                <i class="bi bi-info-circle"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    @await Html.PartialAsync("_PaginationPartial", Model)
+</div>
+
+

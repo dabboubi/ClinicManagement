@@ -1,0 +1,23 @@
+﻿<nav>
+    <!-- Pagination section -->
+    <ul class="pagination justify-content-end">
+        <!-- Previous page button -->
+        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1, entries = Model.SelectedEntries })">Previous</a>
+        </li>
+
+        <!-- Page number buttons -->
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i, entries = Model.SelectedEntries })">@i</a>
+            </li>
+        }
+
+        <!-- Next page button -->
+        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1, entries = Model.SelectedEntries })">Next</a>
+        </li>
+    </ul>
+</nav>
+

@@ -1,0 +1,65 @@
+﻿@model PatientsViewModel
+
+<h3>Patients</h3>
+<hr>
+<div class="col-12 mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        @{
+            ViewData["Action"] = "Index";
+            ViewData["Controller"] = "Patients";
+        }
+        @await Html.PartialAsync("_EntryFormPartial", Model)
+    </div>
+</div>
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <!-- Table for displaying patient information -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <!-- Table headers -->
+                        <th>Name</th>
+                        <th>Sex</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th><a href="@Url.Action("Add", "Patients")" class="btn btn-primary btn-sm"><i class="bi bi-plus"></i> Add</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each patient and display their information -->
+                    @foreach (var patient in Model.Patients)
+                    {
+                        <tr>
+                            <!-- Patient details -->
+                            <td>@patient.Name</td>
+                            <td>@patient.Sex</td>
+                            <td>@patient.Phone</td>
+                            <td>@patient.Address</td>
+                            <td>@patient.City.Name</td>
+                            <td>
+                                <!-- Buttons for deleting and viewing a patient -->
+                                <a class="btn btn-danger btn-sm delete-btn"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#deleteModal"
+                                   data-record-id="@patient.Id"
+                                   data-record-type="patients">
+                                    <i class="bi bi-trash-fill"></i> DELETE
+                                </a>
+
+                                <a href="@Url.Action("Details", "Patients", new { id = patient.Id })" class="btn btn-info btn-sm"><i class="bi bi-info-circle"></i> View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Include the partial view for delete confirmation modal -->
+@await Html.PartialAsync("_DeletePartial")
+<div class="col-12">
+    @await Html.PartialAsync("_PaginationPartial", Model)
+</div>

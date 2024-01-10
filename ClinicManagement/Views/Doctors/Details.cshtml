@@ -1,0 +1,115 @@
+﻿@model DoctorDetailViewModel
+@{ ViewBag.Title = Model.Heading; }
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2>Profile</h2>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Edit", "Doctors", new { id = Model.Doctor.Id })" class="btn btn-light">
+                            <i class="bi bi-pencil-square m-1"></i>Edit
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 col-12">
+                        @Html.AntiForgeryToken()
+                        <h3>@Model.Doctor.Name</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa fa-user"></i><strong>Name:</strong> @Model.Doctor.Name</li>
+                            <li class="list-group-item"><i class="fa fa-map-marker user-profile-icon"></i><strong>Address:</strong> @Model.Doctor.Address</li>
+                            <li class="list-group-item"><i class="fa fa-briefcase"></i><strong>Specialization:</strong> @Model.Doctor.Specialization.Name</li>
+                            <li class="list-group-item"><i class="fa fa-phone"></i><strong>Phone:</strong> @Model.Doctor.Phone</li>
+                        </ul>
+                        <span class="badge rounded-pill @((Model.Doctor.IsAvailable) ? "bg-success" : "bg-danger") ms-2" readonly>
+                            @((Model.Doctor.IsAvailable) ? "Available" : "Closed")
+                        </span>
+                    </div>
+                    <div class="col-md-9 col-12">
+                        <div class="tabs-container">
+                            <!-- Nav Tabs -->
+                            <ul class="nav nav-tabs" id="myTabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_content1">Upcoming Appointments</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_content2">All</a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tab_content1">
+                                    <!-- Upcoming Appointments -->
+                                    <table class="table table-striped no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Details</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.UpcomingAppointments)
+                                            {
+                                                <tr>
+                                                    <td>@item.Patient.Name</td>
+                                                    <td>@item.Patient.Phone</td>
+                                                    <td>@item.StartDateTime.ToString("dd-MM-yyyy")</td>
+                                                    <td>@item.StartDateTime.ToString("HH:mm")</td>
+                                                    <td>@item.Detail</td>
+                                                    <td>
+                                                        <a href="@Url.Action("Details", "Patients", new { id = item.Patient.Id })" class="btn btn-primary btn-sm">
+                                                            <i class="fa fa-folder"></i>View
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="tab_content2">
+                                    <!-- All Appointments -->
+                                    <table class="table table-striped no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Details</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Appointments)
+                                            {
+                                                <tr>
+                                                    <td>@item.Patient.Name</td>
+                                                    <td>@item.Patient.Phone</td>
+                                                    <td>@item.StartDateTime.ToString("MMM")-@item.StartDateTime.ToString("d ")-@item.StartDateTime.ToString("yyyy")</td>
+                                                    <td>@item.StartDateTime.ToString("HH:mm")</td>
+                                                    <td>@item.Detail</td>
+                                                    <td><a href="@Url.Action("Details", "Patients", new { id = item.Patient.Id })" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i>View</a></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

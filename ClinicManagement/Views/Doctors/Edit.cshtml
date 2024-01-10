@@ -1,0 +1,67 @@
+﻿@model AddDoctorViewModel
+<form asp-controller="Doctors" asp-action="Edit" enctype="multipart/form-data" method="post" class="mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">Edit Doctors</div>
+                <div class="card-body">
+                    @Html.AntiForgeryToken()
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Name, new { @class = "col-form-label col -sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class=" row text-center">
+                        <label class=" col-form-label  col-sm-2">Specialization</label>
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(model => model.SelectedSpecializationId, new SelectList(Model.Specializations, "Id", "Name"), "Select Specialization", new { @class = "form-select " })
+                            @Html.ValidationMessageFor(model => model.SelectedSpecializationId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Address, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+
+                            @Html.TextBoxFor(m => m.Address, new { @class = "form-control   " })
+                            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class=" row text-center">
+                        @Html.LabelFor(model => model.Phone, new { @class = "col-form-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class=" row text-center ">
+                        <label class=" col-form-label  col-sm-2">Status</label>
+                        <div class=" d-flex col-sm-10 d-flex align-items-center ">
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.IsAvailable, "true", new { @class = "form-check-input", id = "Available" })
+                                <label class="form-check-label" for="Approuved">Available</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.IsAvailable, "false", new { @class = "form-check-input", id = "Closed" })
+                                <label class="form-check-label" for="Pending">Closed</label>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.IsAvailable, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success">Update</button>
+                            <a class="btn btn-primary" asp-controller="Doctors" asp-action="Index">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
