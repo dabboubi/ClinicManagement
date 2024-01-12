@@ -1,3 +1,4 @@
+using ClinicManagement.Hubs;
 using ClinicManagement.Models;
 using ClinicManagement.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +45,7 @@ namespace ClinicManagement
             //IConfiguration service GetConnectionString() method.
             services.AddIdentity<ApplicationUser, IdentityRole>()
         .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            services.AddSignalR();
             services.AddControllersWithViews();
         }
 
@@ -70,6 +72,7 @@ namespace ClinicManagement
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chatHub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

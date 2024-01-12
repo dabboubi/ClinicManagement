@@ -1,0 +1,217 @@
+﻿@model ChatViewModel
+@{ ViewBag.Title = Model.Heading; }
+<div>
+    <h2>Chat</h2>
+
+
+    <div class="row">
+        <div class="col-md-4 col-lg-3 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search...">
+                    </div>
+
+                    <ul class="list-group" id="receiverList">
+                        @foreach (var user in Model.Users)
+                        {
+
+                            <li class="list-group-item" data-user-id="@user.Value">@user.Text</li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-lg-9 col-xl-9">
+            <!-- Container to display chat messages -->
+            <div id="chatMessages" class="card" style="border-radius: 15px;">
+                <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                     style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <i class="fas fa-angle-left"></i>
+                    <!-- Display the receiver's name here -->
+                    <p class="mb-0 fw-bold" id="receiverName"></p>
+                    <i class="fas fa-times"></i>
+                </div>
+
+                <div class="card-body" id="chatMessagesContainer">
+                    @if (Model.Messages != null)
+                    {
+                        @foreach (var message in Model.Messages)
+                        {
+                            <!-- Your existing message rendering logic goes here -->
+                        }
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <!-- Input field for entering the message -->
+                        <input type="text" id="messageInput" placeholder=" Type your message" class="form-control" />
+
+                        <!-- Button to trigger the sendMessage function -->
+                        <button onclick="sendMessage()" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <!-- Include jQuery and SignalR scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.12/signalr.min.js"></script>
+
+    <!-- Create a SignalR connection to the ChatHub -->
+    <script>
+        // Initialize a SignalR connection
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+
+        // Function to load chat history based on the selected user
+        function loadChatHistory(receiverId) {
+            // Invoke the server method to load chat history
+            connection.invoke("LoadChatHistory", receiverId)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+        }
+
+
+        // Start the SignalR connection
+        connection.start().then(function () {
+            // Load chat history when the page is loaded
+            var defaultReceiverId = $("#receiverList li:first-child").data("user-id");
+            loadChatHistory(defaultReceiverId);
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+
+        // Add an event listener to the unordered list to trigger chat history loading when a user is selected
+        $("#receiverList").on("click", "li", function () {
+            // Remove the "active" class from all list items
+            $("#receiverList li").removeClass("active");
+
+            // Add the "active" class to the clicked list item
+            $(this).addClass("active");
+
+            // Get the selected receiver's ID from the clicked list item
+            var receiverId = $(this).data("user-id");
+
+            // Load chat history for the selected user
+            loadChatHistory(receiverId);
+
+            // Update receiver name in the header based on the selected user
+            var receiverName = $(this).text();
+            $("#receiverName").text(receiverName);
+        });
+        // Function to filter the user list based on the search input
+        function filterUsers() {
+            var searchTerm = $("#searchInput").val().toLowerCase();
+
+            $("#receiverList li").each(function () {
+                var userName = $(this).text().toLowerCase();
+                var userId = $(this).data("user-id");
+
+                // Show or hide the user based on the search term
+                if (userName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        // Add an event listener to the search input
+        $("#searchInput").on("input", function () {
+            filterUsers();
+        });
+
+
+        // Define a client-side (Frontend ) method to handle incoming messages
+        connection.on("ReceiveMessage", function (user, message, timestamp) {
+            // Get the chatMessages div and append the received message
+            var chatMessages = $("#chatMessagesContainer");
+            // Determine the sender's display name
+            var senderDisplayName = (user === '@User.Identity.Name') ? "You" : user;
+            // Format the timestamp
+            var formattedTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            // Append the message to the chat container
+            chatMessages.append("<div class='d-flex flex-row justify-content-start mb-4'>" +
+                "<img src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp' alt='avatar' style='width: 45px; height: 100%;'>" +
+                "<div class='p-3 ms-3' style='border-radius: 15px; background-color: rgba(57, 192, 237,.2);'>" +
+                "<p class='small mb-0'>" + message + "</p>" +
+                "<p>" + formattedTimestamp + "</p>" +
+                "</div></div>");
+
+            // Update receiver name in the header
+            $("#receiverName").text(senderDisplayName);
+        });
+
+        // Define a client-side (Frontend ) method to handle loading chat history
+        connection.on("LoadChatHistory", function (messages) {
+            var chatMessages = $("#chatMessagesContainer");
+            // Clear existing messages before appending new ones
+            chatMessages.html("");
+            messages.forEach(function (message) {
+                // Determine the sender's display name
+                var senderDisplayName = (message.userName === '@User.Identity.Name') ? "You" : message.userName;
+                // Format the timestamp
+                var formattedTimestamp = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                // Append the message to the chat container
+                chatMessages.append("<div class='d-flex flex-row justify-content-" +
+                    ((message.userName === '@User.Identity.Name') ? "start" : "end") + " mb-4'>" +
+                    "<img src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp' alt='avatar' style='width: 45px; height: 100%;'>" +
+                    "<div class='p-3 ms-3' style='border-radius: 15px; background-color: rgba(57, 192, 237,.2);'>" +
+                    "<p class='small mb-0'>" + message.message + "</p>" +
+                    "<p>" + formattedTimestamp + "</p>" +
+                    "</div></div>");
+
+                // Update receiver name in the header for the first message
+                if ($("#receiverName").text() === "") {
+                    $("#receiverName").text(senderDisplayName);
+                }
+            });
+        });
+
+        // Function to send a message to a selected user
+        function sendMessage() {
+            // Get the selected receiver's ID from the clicked list item
+            var receiverId = $("#receiverList li.active").data("user-id");
+            // Get the message input
+            var messageInput = $("#messageInput");
+            // Get the message
+            var message = messageInput.val();
+
+            // Check if the message is not empty
+            if (message.trim() === "") {
+                // Display an alert or handle it in your preferred way
+                alert("Please enter a non-empty message.");
+                return;
+            }
+
+            // Clear the message input
+            messageInput.val("");
+
+            // Invoke the server method to send a message
+            connection.invoke("SendMessageToUser", receiverId, message)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+            // Get the chatMessages container
+            var chatMessages = $("#chatMessagesContainer");
+            // Format the timestamp
+            var formattedTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            // Append the sent message to the chat container
+            chatMessages.append("<div class='d-flex flex-row justify-content-end mb-4'>" +
+                "<img src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp' alt='avatar' style='width: 45px; height: 100%;'>" +
+                "<div class='p-3 me-3 border' style='border-radius: 15px; background-color: #fbfbfb;'>" +
+                "<p class='small mb-0'>" + message + "</p>" +
+                "<p>" + formattedTimestamp + "</p>" +
+                "</div></div>");
+        }
+    </script>
+}
